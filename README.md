@@ -1,2 +1,9 @@
 # BookShare
-Aplicaci贸n para compartir libros con personas cercanas a ti desarrollada como pr谩ctica de un curso del SOC en colaboraci贸n con la UOC
+Aplicaci贸n para compartir libros con personas cercanas a ti desarrollada como pr谩ctica de un curso del SOC en colaboraci贸n con laC
+
+Se usa GitFlow por lo que todas las features branches se deben hacer a partir de la branch development.
+
+Atenci胣! Cuando hag胕s Git clone por defecto s胠o baja la master.
+Deb胕s bajar tambi茅n la development para hacer los git checkout -b featureX a partir de ah铆.
+
+Para hacerlo, si haceis git brach -a vereis el resto de branches. Basta con hacer git checkout development y tambi胣 os bajar谩la branch adecuada.
