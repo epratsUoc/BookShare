@@ -62,10 +62,6 @@ public class ScannerActivity extends Activity implements ZBarScannerView.ResultH
 
     @Override
     public void handleResult(Result rawResult) {
-        // Do something with the result here
-        Log.v("RESULTATS", rawResult.getContents()); // Prints scan results
-        Log.v("FORMATS", rawResult.getBarcodeFormat().getName()); // Prints the scan format (qrcode, pdf417 etc.)
-
         //Por alguna razón que desconozco, la app no reconoce los ISBN si el EAN13 no está también incluído
         //(¿quizás porque tienen el mismo formato, pero ISBN empieza por 978?), así que si alguien scanea un
         //EAN13 simplemente volvemos a scanear hasta encontrar un ISBN válido
@@ -73,8 +69,7 @@ public class ScannerActivity extends Activity implements ZBarScannerView.ResultH
             mScannerView.resumeCameraPreview(this);
         } else {
             Intent intent = new Intent (this, UploadBook.class);
-            intent.putExtra("Content", rawResult.getContents());
-            intent.putExtra("Format", rawResult.getBarcodeFormat().getName());
+            intent.putExtra("ISBN", rawResult.getContents());
             startActivity(intent);
         }
     }
