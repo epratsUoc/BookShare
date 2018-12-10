@@ -99,7 +99,10 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.booklist) {
             Intent intent = new Intent (this, BookListActivity.class);
             startActivity(intent);
-        } else if (id == R.id.activity2) {
+        } else if (id == R.id.my_books) {
+            Intent intent = new Intent (this, MyBookListActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.scan_book) {
             Intent intent = new Intent (this, ScannerActivity.class);
             startActivity(intent);
         }

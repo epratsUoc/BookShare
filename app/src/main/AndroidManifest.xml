@@ -39,7 +39,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="edu.uoc.curs.bookshare.BookListActivity" />
         </activity>
-        <activity android:name=".UploadBook"></activity>
+        <activity android:name=".UploadBook" />
+        <activity android:name=".MyBookListActivity"></activity>
     </application>
 
 </manifest>

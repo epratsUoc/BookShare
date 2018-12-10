@@ -9,7 +9,11 @@
             android:icon="@drawable/ic_launcher_foreground"
             android:title="Available Books" />
         <item
-            android:id="@+id/activity2"
+            android:id="@+id/my_books"
+            android:icon="@drawable/ic_launcher_foreground"
+            android:title="Your Scanned Books" />
+        <item
+            android:id="@+id/scan_book"
             android:icon="@drawable/ic_launcher_foreground"
             android:title="Upload Book" />
     </group>

@@ -2,15 +2,18 @@ package edu.uoc.curs.bookshare;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -27,15 +30,20 @@ import java.net.ProtocolException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 
+import edu.uoc.curs.bookshare.database.Book;
+import edu.uoc.curs.bookshare.database.BookRepository;
+import edu.uoc.curs.bookshare.database.BookViewModel;
+
 public class UploadBook extends AppCompatActivity {
 
     private static final String bookUrl = "https://www.googleapis.com/books/v1/volumes?q=isbn:";
 
-    private Button scan;
+    private Button scan, save;
     private TextView authorText, titleText, descriptionText, dateText, isbn10, isbn13;
     private ImageView thumbView;
     private String isbn;
     private Dialog dialog;
+    private Book mNewBook;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +51,7 @@ public class UploadBook extends AppCompatActivity {
         setContentView(R.layout.activity_upload_book);
 
         scan = findViewById(R.id.scan_button);
+        save = findViewById(R.id.save_button);
         authorText = findViewById(R.id.book_author);
         titleText = findViewById(R.id.book_title);
         descriptionText = findViewById(R.id.book_description);
@@ -50,6 +59,8 @@ public class UploadBook extends AppCompatActivity {
         isbn10 = findViewById(R.id.book_isbn10);
         isbn13 = findViewById(R.id.book_isbn13);
         thumbView = findViewById(R.id.thumb);
+
+        mNewBook = new Book ();
 
         Intent intent = getIntent();
         isbn = intent.getStringExtra("ISBN");
@@ -70,7 +81,21 @@ public class UploadBook extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(UploadBook.this, ScannerActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(intent);
+            }
+        });
+
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if ("".equals(mNewBook.getIsbn13())) {
+                    Toast.makeText(UploadBook.this, "Book can not be saved", Toast.LENGTH_LONG).show();
+                } else {
+                    BookViewModel saveBook = ViewModelProviders.of(UploadBook.this).get(BookViewModel.class);
+                    saveBook.insert(mNewBook);
+                    finish();
+                }
             }
         });
     }
@@ -205,6 +230,7 @@ public class UploadBook extends AppCompatActivity {
                         JSONObject imageInfo = volumeObject.getJSONObject("imageLinks");
                         String imageUrl = imageInfo.getString("thumbnail");
                         Picasso.get().load(imageUrl).into(thumbView);
+                        mNewBook.setImageUrl(imageUrl);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -218,10 +244,14 @@ public class UploadBook extends AppCompatActivity {
                         JSONObject isbnObject2 = isbnArray.getJSONObject(1);
                         if ("ISBN_13".equals(isbnObject1.getString("type"))) {
                             isbn10.setText("ISBN 10: " + isbnObject2.getString("identifier"));
+                            mNewBook.setIsbn10(isbnObject2.getString("identifier"));
                             isbn13.setText("ISBN 13: " + isbnObject1.getString("identifier"));
+                            mNewBook.setIsbn13(isbnObject1.getString("identifier"));
                         } else {
                             isbn10.setText("ISBN 10: " + isbnObject1.getString("identifier"));
+                            mNewBook.setIsbn10(isbnObject1.getString("identifier"));
                             isbn13.setText("ISBN 13: " + isbnObject2.getString("identifier"));
+                            mNewBook.setIsbn13(isbnObject2.getString("identifier"));
                         }
                     } catch (JSONException jse) {
                         isbn10.setText("ISBN10 NOT FOUND");
@@ -238,6 +268,10 @@ public class UploadBook extends AppCompatActivity {
                     dialog.dismiss();
                     Log.e("BookApi.class", e.toString());
                 }
+                mNewBook.setTitle(titleText.getText().toString());
+                mNewBook.setAuthor(authorText.getText().toString());
+                mNewBook.setDate(dateText.getText().toString());
+                mNewBook.setDescription(descriptionText.getText().toString());
             }
         }
     }

@@ -10,4 +10,5 @@
     <string name="title_book_list">Books</string>
     <string name="title_book_detail">Book Detail</string>
     <string name="title_scan">Scan</string>
+    <string name="title_my_books">My Scanned Books</string>
 </resources>
