@@ -5,13 +5,11 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -20,7 +18,7 @@ import edu.uoc.curs.bookshare.database.BookViewModel;
 
 public class MyBookListActivity extends AppCompatActivity {
 
-    private BookViewModel mBookViewModel;
+    BookViewModel mBookViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +35,8 @@ public class MyBookListActivity extends AppCompatActivity {
             }
         });
 
-        RecyclerView recyclerView = findViewById(R.id.recyclerview);
-        final BookListAdapter adapter = new BookListAdapter(this);
+        RecyclerView recyclerView = findViewById(R.id.my_book_list);
+        final MyBookAdapter adapter = new MyBookAdapter(this, this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
